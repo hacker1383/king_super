@@ -8,7 +8,7 @@ local group_bye = redis:hget(hash,'bye')
 if matches[1] == 'delbye' and not matches[2] and is_owner(msg) then 
     
    redis:hdel(hash,'welcome')
-        return 'متن خداحافظی پاک شد'
+        return 'bye text cleaned!'
 end
 
 local url , res = http.request('http://api.gpmod.ir/time/')
@@ -17,7 +17,7 @@ local jdat = json:decode(url)
 
 if matches[1] == 'setbye' and is_owner(msg) then
 redis:hset(hash,'bye',matches[2])
-        return 'متن خداحافظی تغییر یافت به : \n'..matches[2]
+        return 'bye text set to: \n'..matches[2]
 end
 
 if matches[1] == 'chat_del_user' and msg.service then
