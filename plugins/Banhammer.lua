@@ -94,7 +94,7 @@ local function kick_ban_res(extra, success, result)
 		receiver = 'channel#id'..chat_id
 	  end
 	  if success == 0 then
-		return send_large_msg(receiver, "Cannot find user by that username!")
+		return send_large_msg(receiver, "<b>Cannot find user by that username!</b>")
 	  end
       local member_id = result.peer_id
       local user_id = member_id
@@ -103,11 +103,11 @@ local function kick_ban_res(extra, success, result)
       local get_cmd = extra.get_cmd
        if get_cmd == "kick" then
          if member_id == from_id then
-            send_large_msg(receiver, "You can't kick yourself")
+            send_large_msg(receiver, "<b>You can't kick yourself</b>")
 			return
          end
          if is_momod2(member_id, chat_id) and not is_admin2(sender) then
-            send_large_msg(receiver, "You can't kick mods/owner/admins")
+            send_large_msg(receiver, "<b>You can't kick mods/owner/admins</b>")
 			return
          end
 		 kick_user(member_id, chat_id)
@@ -116,15 +116,15 @@ local function kick_ban_res(extra, success, result)
 			send_large_msg(receiver, "You can't ban mods/owner/admins")
 			return
         end
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] banned')
+        send_large_msg(receiver, '<b>User</b> @'..member..' ['..member_id..']<b> banned of supergroup!</b>')
 		ban_user(member_id, chat_id)
       elseif get_cmd == 'unban' then
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] unbanned')
+        send_large_msg(receiver, '<b>User</b> @'..member..' ['..member_id..'] <b>unbanned of supergroup!</b>')
         local hash =  'banned:'..chat_id
         redis:srem(hash, member_id)
         return 'User '..user_id..' unbanned'
       elseif get_cmd == 'banall' then
-        send_large_msg(receiver, 'User @'..member..' ['..member_id..'] globally banned')
+        send_large_msg(receiver, '<b>User</b> @'..member..' ['..member_id..'] <b>banned of all supergroups!<b>')
 		banall_user(member_id)
       elseif get_cmd == 'unbanall' then
         send_large_msg(receiver, 'User @'..member..' ['..member_id..'] globally unbanned')
@@ -184,17 +184,17 @@ local support_id = msg.from.id
          	return
         end
         if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-          	return "you can't ban mods/owner/admins"
+          	return "<b>you can't ban mods/owner/admins</b>"
         end
         if tonumber(matches[2]) == tonumber(msg.from.id) then
-          	return "You can't ban your self !"
+          	return "<b>You can't ban your self !</b>"
         end
         local print_name = user_print_name(msg.from):gsub("‮", "")
 	    local name = print_name:gsub("_", "")
 		local receiver = get_receiver(msg)
         savelog(msg.to.id, name.." ["..msg.from.id.."] baned user ".. matches[2])
         ban_user(matches[2], msg.to.id)
-		send_large_msg(receiver, 'User ['..matches[2]..'] banned')
+		send_large_msg(receiver, '<b>User</b> ['..matches[2]..'] <b>banned of supergroup!</b>')
       else
 		local cbres_extra = {
 		chat_id = msg.to.id,
@@ -222,7 +222,7 @@ local support_id = msg.from.id
         	local print_name = user_print_name(msg.from):gsub("‮", "")
 			local name = print_name:gsub("_", "")
         	savelog(msg.to.id, name.." ["..msg.from.id.."] unbaned user ".. matches[2])
-        	return 'User '..user_id..' unbanned'
+        	return '<b>User</b> '..user_id..' <b>unbanned of supergroup!</b>'
       else
 		local cbres_extra = {
 			chat_id = msg.to.id,
@@ -247,10 +247,10 @@ if matches[1]:lower() == 'kick' then
 			return
 		end
 		if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-			return "you can't kick mods/owner/admins"
+			return "<b>you can't kick mods/owner/admins</b>"
 		end
 		if tonumber(matches[2]) == tonumber(msg.from.id) then
-			return "You can't kick your self !"
+			return "<b>You can't kick your self !</b>"
 		end
     local user_id = matches[2]
     local chat_id = msg.to.id
@@ -287,7 +287,7 @@ end
          	return false
         end
         	banall_user(targetuser)
-       		return 'User ['..user_id..' ] globally banned'
+       		return '<b>User</b> ['..user_id..' ]  <b>banned of all supergroups!</b>'
      else
 	local cbres_extra = {
 		chat_id = msg.to.id,
@@ -307,7 +307,7 @@ end
           	return false
         end
        		unbanall_user(user_id)
-        	return 'User ['..user_id..' ] globally unbanned'
+        	return '<b>User</b> ['..user_id..' ] <b>unbanned of all supergroups!</b>'
     else
 		local cbres_extra = {
 			chat_id = msg.to.id,
